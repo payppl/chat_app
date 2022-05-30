@@ -1,0 +1,255 @@
+* {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+html,
+body {
+  font-family: sans-serif;
+  font-size: 12px;
+  height: 100%;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  background-color: bisque;
+}
+.center-divs {
+  height: 100%;
+  width: 66%;
+}
+.input {
+  z-index: auto;
+  padding: 1em;
+  height: 8vh;
+  margin-top: auto;
+  bottom: 0px;
+  align-items: center;
+}
+#login-button {
+  width: 100px;
+  height: 30px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+aside {
+  width: 15%;
+  padding: 1rem;
+  background-color: rgb(212, 176, 130);
+}
+
+aside > h3 {
+  text-align: center;
+  margin-bottom: 0.5em;
+  font-size: 1.25em;
+}
+.rooms {
+  float: right;
+  margin-left: auto;
+  width: 15vw;
+  padding: 1rem;
+  background-color: rgb(212, 176, 130);
+}
+
+#chat {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  height: 83%;
+  scrollbar-width: none;
+  overflow-y: scroll;
+  padding: 1rem;
+  max-width: 90%;
+}
+#chat::-webkit-scrollbar {
+  display: none;
+}
+#chat-text {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+  padding: 0px 0px 10px 0px;
+}
+#chat-text p {
+  width: 100%;
+  color: #000;
+}
+
+#chat-status-msg {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-style: italic;
+}
+
+#users {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 2em;
+}
+
+#users > li {
+  padding: 0.25em;
+  cursor: pointer;
+}
+
+#users > li:hover {
+  background-color: #eee;
+}
+
+#text-input {
+  flex: 0 1 auto;
+  height: 60%;
+  font-size: 1.7em;
+  padding: 0.3em;
+  width: 85%;
+  flex-flow: row nowrap;
+  background-color: rgb(221, 190, 149);
+  border-radius: 20px;
+  border: 2px solid rgb(212, 176, 130);
+}
+
+#send-btn {
+  flex: 0 0 auto;
+  font-size: 1.7em;
+  padding: 0.3em;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 2px solid rgb(212, 176, 130);
+  background-color: rgb(221, 190, 149);
+}
+#send-btn2 {
+  flex: 0 0 auto;
+  font-size: 1.7em;
+  padding: 0.3em;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 2px solid rgb(212, 176, 130);
+  background-color: rgb(221, 190, 149);
+}
+#notifi {
+  position: absolute;
+  display: flex;
+  width: 600px;
+  height: 20px;
+  left: 50%;
+  margin-left: -300px;
+}
+#notifi-msg {
+  background-color: aqua;
+  width: 100%;
+  height: 100%;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  border-bottom: 1px solid;
+  border-radius: 6px;
+}
+#rooms-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  font-size: 2em;
+  transition: top 0.2s, opacity 0.2s;
+}
+
+#rooms-box > div {
+  padding: 1em;
+  background: #fff;
+  border-radius: 6px;
+  scrollbar-width: none;
+  overflow-y: scroll;
+  max-height: 60%;
+}
+#rooms-box > div::-webkit-scrollbar {
+  display: none;
+}
+
+#close-button-rooms {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  width: min-content;
+  margin-left: auto;
+}
+
+#addroom-btn {
+  font-size: 1.5rem;
+  width: auto;
+  text-align: center;
+}
+
+#leaveroom-btn {
+  font-size: 1.5rem;
+  width: auto;
+  text-align: center;
+}
+#room-list-text {
+  display: block;
+  text-align: center;
+}
+#room-list {
+  list-style-type: none;
+  padding: 0;
+}
+#room-list > li > p:hover {
+  color: rgb(223, 223, 223);
+  cursor: pointer;
+}
+
+#rom {
+  width: 250px;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+#login-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  font-size: 2em;
+  transition: top 0.2s, opacity 0.2s;
+}
+
+#login-box.hidden {
+  top: -100vh;
+  opacity: 0;
+}
+
+#login-box > div {
+  padding: 1em;
+  background: #fff;
+  border-radius: 6px;
+}
+
+#login-box h2 {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+#login-box input {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  padding: 1rem;
+}
