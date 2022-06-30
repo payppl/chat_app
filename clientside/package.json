@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Electron Chat App Demo",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo 'chuj'",
     "server": "",

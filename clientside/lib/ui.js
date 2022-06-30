@@ -1,7 +1,16 @@
-const chuj = require('marked');
+import RoomList from './classes/RoomList.js';
+import Notification from './classes/Notification.js';
+import CreateRooms from './classes/Rooms.js';
+import InputBar from './classes/InputBar.js';
+import ChatArea from './classes/ChatArea.js';
+import UserList from './classes/UserList.js';
+import LoginBox from './classes/LoginBox.js';
+
+
 const electron = require('electron');
 const ss = require('socket.io-stream');
 const {BrowserWindow} = require('electron');
+
 const color = require('color');
 const sfm = require('sfmediastream');
 const { useState } = require('react');
@@ -15,18 +24,23 @@ document.addEventListener('DOMContentLoaded', function onLoad() {
   const app = React.createElement(App);
   ReactDOM.render(app, document.body);
 });
-
+document.addEventListener('keydown', (event) => {
+  var name = event.key;
+  if(name === 'j') {
+    console.log('eo');
+  }
+});
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       url: '',
-      users: [],
+      users: ['ea','ew'],
       messages: [],
       status: '',
-      rooms: [],
-      currentroom: ''
+      rooms: ['chuj','pizda'],
+      currentroom: 'chuj'
       
     };
     this.onLogin = this.onLogin.bind(this);
@@ -47,7 +61,6 @@ class App extends React.Component {
       this.appendMessage(`Connected to server `);
       this.setState({ status: '' });
       this.setState({currentroom: 'ogolny'});
-      console.log(this.state.currentroom);
     });
     socket.on('currentRoom', data => {
       this.state.currentroom = data.roomname;
@@ -73,8 +86,6 @@ class App extends React.Component {
     });
     socket.on('loginemit', data => {
       this.appendMessage(`${ data.username } has logged in.`);
-      this.onShowNotification(`${ data.username } has logged in.`);
-      //this.setState({ users: data.users });
     });
     socket.on('loginemit_data', data => {
         this.setState({users: data.users});
@@ -142,7 +153,7 @@ class App extends React.Component {
       return { messages };
     });
   }
-  onShowNotification(notifitext) {
+  onShowNotification( notifitext) {
     //var notifibox = document.querySelector('notifi');
     //document.getElementById('#notifi-msg').attributes[0].name = notifitext;\
     document.getElementById('notifi').style.display = 'flex';
@@ -151,7 +162,7 @@ class App extends React.Component {
     chuj.innerHTML = notifitext;
     //textnofiti = notifitext;
     //document.querySelector('#').value
-    console.log(" wqe " + `${chuj.innerHTML}`+ " ");
+    //console.log(" wqe " + `${chuj.innerHTML}`+ " ");
     setTimeout(function () {
       document.getElementById('notifi').style.display = 'none';
     }, 1000);
@@ -202,14 +213,23 @@ class App extends React.Component {
   onSend(text) {
     const username = this.state.username;
     const cr = this.state.currentroom;
-    //io.in(cr).emit(username, text);
-    socket.emit('message', { username, text, cr});
-  }
-  
-  TalkToOthers(e) {
-    if(e.keyCode == 27){ 
-      console.log('eo');
+    if(username == null){
+      this.onShowNotification("Username not correct or is null");
+      if(cr == null) {
+        this.onShowNotification("Room is null");
+        if(text == null) {
+          this.onShowNotification("text is null");
+        }
+      }
+    }else {
+      socket.emit('message', { username, text, cr});
     }
+
+  }
+
+  TalkToOthers() {
+
+      
     var constraints = { audio: true };
     navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
         var mediaRecorder = new MediaRecorder(mediaStream);
@@ -219,7 +239,7 @@ class App extends React.Component {
         mediaRecorder.ondataavailable = function(e) {
             this.chunks.push(e.data);
             var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
-            console.log(e.data);
+            //console.log(e.data);
             ss(socket).emit('voice', blob);
         };
         mediaRecorder.onstop = function(e) {
@@ -238,14 +258,15 @@ class App extends React.Component {
       //this.state.currentroom = roomname;
       socket.emit('createRoomandJoin', {roomname});
     } else {
-      this.appendMessage('podałeś nie prawidłową nazwe kanału lub nazwa kanału jest pusta');
+      this.onShowNotification('podałeś nie prawidłową nazwe kanału lub nazwa kanału jest pusta');
     }
   }
   onJoinTR(roomname) {
     const username = this.state.username;
-    console.log('clicket ' + `${roomname}`);
+    //console.log('clicket ' + `${roomname}`);
     socket.emit('JoinRoom', {username, roomname});
     this.state.currentroom = roomname;
+    this.onShowNotification(`current room ${this.state.currentroom}`);
   }
 
   OnLeaveRoom(roomname) {
@@ -266,295 +287,29 @@ class App extends React.Component {
       'main',
       null,
       React.createElement(LoginBox, { ref: 'loginBox', url: 'http://185.238.75.83:3000', onLogin: this.onLogin, onZarejestruj: this.onZarejestruj }),
-      React.createElement(NotificationBox, {ref: 'notificationBox'}),
+      React.createElement(Notification, {ref: 'notificationBox'}),
       React.createElement(
         'div',
         { className: 'content' },
-          React.createElement(UserList, { users: this.state.users, returnCRoom: this.returnCRoom }),
+          React.createElement(UserList, { users: this.state.users }),
           React.createElement(
             'div',
             {className: 'center-divs'},
             React.createElement(ChatArea, { messages: this.state.messages, status: this.state.status }),
-            React.createElement(InputBar, { ref: 'inputBar', onInput: this.onInput, onSend: this.onSend, TalkToOthers: this.TalkToOthers })
-
+            React.createElement(InputBar, { ref: 'inputBar', onInput: this.onInput, onSend: this.onSend, TalkToOthers: this.TalkToOthers }),
+            
           ),
-         React.createElement(CreateRooms, {ref: 'CreateRooms', rooms: this.state.rooms, onRoomCreated: this.onRoomCreated, OnLeaveRoom: this.OnLeaveRoom, onJoinTR: this.onJoinTR  }),
+          React.createElement(RoomList, {rooms: this.state.rooms, returnCRoom: this.returnCRoom, onJoinTR: this.onJoinTR }),
+         React.createElement(CreateRooms, {ref: 'CreateRooms', rooms: this.state.rooms, onRoomCreated: this.onRoomCreated, OnLeaveRoom: this.OnLeaveRoom, onJoinTR: this.onJoinTR,returnCRoom: this.returnCRoom  }),
           ),
     );
   }
 }
 
-class LoginBox extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.senddata = this.senddata.bind(this);
-    this.regi = this.regi.bind(this);
-    
-  }
-  focus() {
-    this.refs.username.focus();
-  }
-    senddata() {
-    //if (e.keyCode === 13) {
-      console.log(this.refs.username);
-      const value = this.refs.username.value.trim();
-      const pass = this.refs.password.value.trim();
-      const url = this.refs.url.value.trim();
-      const buttons = document.querySelector('button');
-      //const cos = this.refs.root.classList;
-      if (value && pass ) {
-        this.props.onLogin(url, value, pass);
-        //buttons.disabled = true;
-      }
-      //}
-    }
-    regi() {
-      const usr = this.refs.username.value.trim();
-      const pass = this.refs.password.value.trim();
-      const url = this.refs.url.value.trim();
-      if (usr && pass ) {
-        this.props.onZarejestruj(url,usr,pass);
-        this.refs.username.value = '';
-        this.refs.password.value = '';
-      } 
-    }
-  render() {
-    return React.createElement(
-      'div',
-      { id: 'login-box', ref: 'root' },
-      React.createElement(
-        'div',
-        null,
-        React.createElement(
-          'h2',
-          null,
-          'Login'
-        ),
-        React.createElement('input', { type: 'url', id: 'server-url', ref: 'url', value: this.props.url }),
-        React.createElement('input', { type: 'text', placeholder: 'enter username', id: 'username', ref: 'username', autofocus: true }),
-        React.createElement('input', { type: 'password', placeholder: 'enter password', id: 'password', ref: 'password' }),
-        React.createElement('button',{ type: 'button', onClick: this.senddata, id: 'login-button', autofocus: true}, 'Login'),
-        React.createElement('button',{ type: 'button', onClick: this.regi, id: 'login-button', autofocus: true}, 'Register')
-      )
-    );
-  }
-}
 
-class UserList extends React.Component {
-  constructor(props){
-    super(props);
-    this.openRooms = this.openRooms.bind(this);
-  }
-  openRooms(){
-    let romb = document.getElementById("rooms-box");
-    romb.style.display = 'flex';
-    let cr = this.props.returnCRoom();
-    console.log(cr);
-    for(const lis of document.querySelectorAll('#room-list>li>p')){
-        console.log(lis);
-      if(lis.innerHTML === cr) {
-        lis.style.color = 'green';
 
-        console.log("true", lis.innerHTML);
-      } else {
-        console.log("false");
-        lis.style.color = 'black';
-      }
-    }
-    
-  }
-  render() {
-    const opts = { sanitize: true };
-    const users = this.props.users.map(user => React.createElement('li', { dangerouslySetInnerHTML: { __html: chuj(user,opts) } }));
-    return React.createElement(
-      'aside',
-      null,
-      React.createElement(
-        'h3',
-        null,
-        'Connected Users'
-      ),
-      React.createElement('button', {id: 'open-rooms-box', onClick: this.openRooms , type: 'button'}, '*'),
-      React.createElement(
-        'ul',
-        { id: 'users' },
-        users
-      ),
-      React.createElement(
-        'div',
-        { id: 'user-stats' },
-        users.length,
-        ' users online.'
-      )
-    );
-  }
-}
-class ChatArea extends React.Component {
-  
-  render() {
-    const opts = { 
-      sanitize: false,
-        xhtml: true };
-    const text = this.props.messages.map(msg => `<p>${ chuj(msg,opts) }</p>`).join('');
-    
-    return React.createElement(
-      'div',
-      { id: 'chat' },
-      
-      React.createElement('div', { id: 'chat-text', dangerouslySetInnerHTML: { __html: text } }),
-      React.createElement(
-        'div',
-        { id: 'chat-status-msg' },
-        this.props.status
-        ),
-        
-      );
-  }
-}
-class InputBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onInput = this.onInput.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onSendEmoji = this.onSendEmoji.bind(this);
-    this.onVoicePass = this.onVoicePass.bind(this);
-  }
-  onSendEmoji() {
-    
-    let emoji = '😁';
-    document.querySelector('#text-input').value += emoji;
-   
-  }
-  onKeyDown(e) {
-    if (e.keyCode === 13) {
-      this.send();
-    }
-  }
-  onInput() {
-    const value = this.refs.input.value.trim();
-    this.props.onInput(value);
-  }
-  onClick() {
-    this.send();
-  }
-  onVoicePass() {
-    this.props.TalkToOthers();
-  }
-  send() {
-    const value = this.refs.input.value.trim();
-    if (value) {
-      this.props.onSend(value);      
-      this.refs.input.value = ''; // Should I mutate state instead?
-    }
-  }
-  focus() {
-    this.refs.input.focus();
-  }
-  render() {
-    return React.createElement(
-      'div',
-      { className: 'input' },
-      React.createElement('input', {
-        type: 'text',
-        id: 'text-input',
-        ref: 'input',
-        
-        placeholder: 'say something...',
-        onInput: this.onInput,
-        onKeyDown: this.onKeyDown
-      }),
-      React.createElement(
-        'button',
-        { id: 'send-btn', onClick: this.onClick },
-        'Send'
-      ),
-      React.createElement(
-        'button',
-        { id: 'send-btn2', onClick: this.onVoicePass },
-        '🎤'
-      ),
-      React.createElement(
-        'a',
-        {id: 'emoji-btn', onClick: this.onSendEmoji },
-        '😁'
-      )
-    );
-  }
-}
-class CreateRooms extends React.Component {
-  constructor(props) {
-    super(props);
-    this.JoinRoom = this.JoinRoom.bind(this);
-    this.addRoom = this.addRoom.bind(this);
-    this.LeaveRoom = this.LeaveRoom.bind(this);
-  }
-  addRoom() {
-    var room_name = document.querySelector('#rom').value;
-    this.props.onRoomCreated(room_name);
-    console.log(`click ${room_name}`);
-  }
-  JoinRoom() {
-    var e = event.target.innerText;
-    this.props.onJoinTR(e);
-    this.Close();
-  }
-  LeaveRoom() {
-    var room_name = document.querySelector('#rom').value;
-    this.props.OnLeaveRoom(room_name);
-    
-    console.log(`click ${room_name}`);
-  }
-  Close() {
-    let box = document.getElementById('rooms-box');
-    box.style.display = "none";
-  }
-  render() {
-    const opts ={
-      sanitize: true
-    };
-    const roomst = this.props.rooms.map(rooms => React.createElement('li', { dangerouslySetInnerHTML: { __html: chuj(rooms,opts)} }));
-    return React.createElement(
-      'div',
-      {id: 'rooms-box'},
-      React.createElement('div', {id: 'rooms-div'},
-      React.createElement('a', {id: 'close-button-rooms', onClick: this.Close}, 'X'),
-      React.createElement('input', { type: 'text', placeholder: 'enter room', id: 'rom', ref: 'roomname', autofocus: true }),
-      React.createElement(
-        'button',
-        {id: 'addroom-btn' , onClick: this.addRoom },
-        'add'
-      ),
-      React.createElement(
-        'button',
-        {id: 'leaveroom-btn' , onClick: this.LeaveRoom },
-        'leave'
-      ),
-      React.createElement('a', {id:'room-list-text'}, 'Lista Pokoi'),
-      React.createElement(
-        'ul',
-        {id: 'room-list',  onClick: this.JoinRoom },
-        roomst
-      )
-      )
-    );
-  }
-}
-class NotificationBox extends React.Component {
-  constructor(props) {
-    super(props);
 
-  }
-  render() {
-    return React.createElement(
-      'div',
-      {id: 'notifi'},
-      React.createElement(
-        'a',
-        {id: 'notifi-msg'},
-        'e'
-      )
-    );
-  }
-}
+
+
+

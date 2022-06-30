@@ -1,3 +1,4 @@
+/* #region main section */
 * {
   margin: 0;
 }
@@ -6,9 +7,10 @@
   display: none;
 }
 
+
 html,
 body {
-  font-family: sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 12px;
   height: 100%;
 }
@@ -22,45 +24,60 @@ main {
   width: 100%;
   height: 100%;
   display: inline-flex;
-  background-color: bisque;
+  background-color: #1B263B;
 }
 .center-divs {
   height: 100%;
-  width: 66%;
+  width: 70%;
 }
+/* #endregion */
+
+/* #region input and chat*/
+
 .input {
   z-index: auto;
   padding: 1em;
-  height: 8vh;
+  height: 10vh;
   margin-top: auto;
   bottom: 0px;
   align-items: center;
-}
-#login-button {
-  width: 100px;
-  height: 30px;
-  font-size: 0.9em;
-  font-weight: 600;
-}
-aside {
-  width: 15%;
-  padding: 1rem;
-  background-color: rgb(212, 176, 130);
-}
-
-aside > h3 {
+  background-color: #0D1B2A;
   text-align: center;
-  margin-bottom: 0.5em;
-  font-size: 1.25em;
+  margin: 0 auto;
 }
-.rooms {
-  float: right;
-  margin-left: auto;
-  width: 15vw;
-  padding: 1rem;
-  background-color: rgb(212, 176, 130);
+#send-btn {
+  flex: 0 0 auto;
+  font-size: 1.7em;
+  padding: 0.3em;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 2px solid rgb(212, 176, 130);
+  background-color: rgb(221, 190, 149);
 }
-
+#send-btn2 {
+  flex: 0 0 auto;
+  font-size: 1.7em;
+  padding: 0.3em;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 2px solid rgb(212, 176, 130);
+  background-color: rgb(221, 190, 149);
+}
+#text-input {
+  flex: 0 1 auto;
+  height: 60%;
+  font-size: 1.7em;
+  padding: 0.3em;
+  width: 85%;
+  flex-flow: row nowrap;
+  background-color: #1B263B;
+  border: 1px solid #1B263B;
+  color: white;
+  margin: 0 auto;
+}
+#text-input:focus {
+  outline: none;
+}
 #chat {
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -84,10 +101,32 @@ aside > h3 {
 }
 
 #chat-status-msg {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
   font-style: italic;
 }
+/* #endregion */
 
+/* #region left side div */
+aside {
+  width: 15%;
+  padding: 1rem;
+  background-color: #0D1B2A;
+  border-right: 0px solid #0D1B2A;
+}
+
+aside > h3 {
+  text-align: center;
+  margin-bottom: 0.5em;
+  font-size: 1.5em;
+  color: #415A77;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  border-block-start-color: #3f646ede;
+}
+aside > #user-stats {
+  color: #415A77;
+  font-size: 15px; 
+}
 #users {
   list-style-type: none;
   padding: 0;
@@ -95,63 +134,81 @@ aside > h3 {
 }
 
 #users > li {
-  padding: 0.25em;
-  cursor: pointer;
+  padding: 0.10em;
+  padding-left: 0.50em;
+  font-size: 16px;
+  color: white;
+  border-left-width: 1px;
+  border-left-color: white;
+  border-left-style: solid;
+
 }
 
-#users > li:hover {
-  background-color: #eee;
-}
+/* #endregion */
 
-#text-input {
-  flex: 0 1 auto;
-  height: 60%;
-  font-size: 1.7em;
-  padding: 0.3em;
-  width: 85%;
-  flex-flow: row nowrap;
-  background-color: rgb(221, 190, 149);
-  border-radius: 20px;
-  border: 2px solid rgb(212, 176, 130);
+/* #region right side div*/
+#roomlistdiv {
+  width: 15%;
+  padding: 1rem;
+  background-color: #0D1B2A;
 }
+#open-rooms-box {
+  width: 100%;
+}
+#roomlistdiv > ul {
+  list-style-type: none;
+  padding: 0;
+}
+#roomlistdiv > a {
+  display: block;
+  margin-bottom: 20px;
+  text-align: center;
+  margin: 10px;
+  font-size: 2em;
+  color: #415A77;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  border-block-start-color: #3f646ede;
+}
+#room-list > li {
+  padding: 0.10em;
+  padding-left: 0.50em;
+  font-size: 16px;
+  color: white;
+  border-left-width: 1px;
+  border-left-color: white;
+  border-left-style: solid;
+}
+/* #endregion */
 
-#send-btn {
-  flex: 0 0 auto;
-  font-size: 1.7em;
-  padding: 0.3em;
-  cursor: pointer;
-  border-radius: 20px;
-  border: 2px solid rgb(212, 176, 130);
-  background-color: rgb(221, 190, 149);
-}
-#send-btn2 {
-  flex: 0 0 auto;
-  font-size: 1.7em;
-  padding: 0.3em;
-  cursor: pointer;
-  border-radius: 20px;
-  border: 2px solid rgb(212, 176, 130);
-  background-color: rgb(221, 190, 149);
-}
-#notifi {
+ /* #region notification div*/
+ #notifi {
   position: absolute;
-  display: flex;
-  width: 600px;
-  height: 20px;
-  left: 50%;
-  margin-left: -300px;
+  display: none;
+  width: 300px;
+  height: auto;
+  left: 40%;
+  margin: 0 auto;
+  word-wrap: break-word;
+  z-index: 1;
 }
 #notifi-msg {
-  background-color: aqua;
+  background-color: rgb(71, 71, 71);
   width: 100%;
-  height: 100%;
+  
   display: block;
-  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  font-size: 1.5vw;
+  padding: 5px;
   border-bottom: 1px solid;
-  border-radius: 6px;
+  border-radius: 4px;
+  color: white;
 }
+ /* #endregion */
+
+/* #region rooms list div*/
 #rooms-box {
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -166,11 +223,13 @@ aside > h3 {
 
 #rooms-box > div {
   padding: 1em;
-  background: #fff;
+  background: #F5F2E7;
   border-radius: 6px;
   scrollbar-width: none;
   overflow-y: scroll;
   max-height: 60%;
+  text-align: center;
+  margin: 0 auto;
 }
 #rooms-box > div::-webkit-scrollbar {
   display: none;
@@ -178,45 +237,69 @@ aside > h3 {
 
 #close-button-rooms {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   padding: 1rem;
   cursor: pointer;
   width: min-content;
-  margin-left: auto;
+  color: red;
+  font-weight: 700;
+
 }
 
-#addroom-btn {
-  font-size: 1.5rem;
-  width: auto;
+#addroom-btn,#leaveroom-btn {
+  font-size: 1.2rem;
+  width: 120px;
   text-align: center;
-}
+  margin: 10px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #395B64;
+  border: 2px solid #3f646ede;
+  color: #2C3333;
+  border-radius: 20px;
 
-#leaveroom-btn {
-  font-size: 1.5rem;
-  width: auto;
-  text-align: center;
+}
+#addroom-btn:hover ,#leaveroom-btn:hover {
+  cursor: pointer;
+  background-color: #395b64e7;
 }
 #room-list-text {
   display: block;
   text-align: center;
+  margin: 10px;
+  color: #2C3333;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  border-block-start-color: #3f646ede;
 }
-#room-list {
+#roomlist {
   list-style-type: none;
   padding: 0;
 }
-#room-list > li > p:hover {
-  color: rgb(223, 223, 223);
+#roomlist > li > p:hover {
+  color: #2C3333;
   cursor: pointer;
 }
 
 #rom {
-  width: 250px;
+  width: 300px;
   display: block;
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-  padding: 1rem;
+  font-size: 2rem;
+  padding: 0.8rem;
+  text-align: center;
+  color: #2C3333;
+  border-radius: 4px;
+  border: 2px solid #3f646ede;
+  background-color: #F5F2E7;
+
 }
+#rom:focus {
+  outline: none;
+}
+/* #endregion */
+
+/* #region login&register div*/
 #login-box {
   display: flex;
   justify-content: center;
@@ -235,21 +318,65 @@ aside > h3 {
   top: -100vh;
   opacity: 0;
 }
-
+#login-box input[type="url"] {
+  display: none;
+}
 #login-box > div {
   padding: 1em;
-  background: #fff;
+  background-color: #F5F2E7;
   border-radius: 6px;
+  text-align: center;
+  margin: 0 auto;
 }
 
 #login-box h2 {
   text-align: center;
   margin-bottom: 0.5em;
+  color: #2C3333;
 }
 
-#login-box input {
+#username,#password {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
   padding: 1rem;
+  border: 2px solid #3f646ede;
+  background-color: #F5F2E7;
+  color: #2C3333;
+  border-top: 0px;
+  border-right: 0px;
+
 }
+#username:focus ,#password:focus {
+  outline: none;
+}
+#login-button {
+  background-color: #395B64;
+  border: 1px solid #3f646ede;
+  color: #2C3333;
+  border-radius: 20px;
+  margin: 5px;
+  width: 130px;
+  height: 40px;
+  font-size: 0.9em;
+  font-weight: 500;
+
+}
+#login-button:hover {
+  background-color: #395b64e7;
+  cursor: pointer;
+}
+/* #endregion */
+
+
+/*
+
+
+.rooms {
+  float: right;
+  margin-left: auto;
+  width: 15vw;
+  padding: 1rem;
+  background-color: rgb(212, 176, 130);
+}
+*/
